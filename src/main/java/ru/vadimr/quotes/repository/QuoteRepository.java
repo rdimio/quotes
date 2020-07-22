@@ -15,6 +15,6 @@ public interface QuoteRepository extends JpaRepository<Quote, Integer> {
 
     Quote findOneById(Integer id);
 
-    @Query(value = "select  c,u.login,q.title from quotes.quotes q join (select quote_id, count(user_id) as c from quotes.score group by quote_id order by c desc limit 10)s on (q.id = s.quote_id) join quotes.users u on (u.id = q.user_id);", nativeQuery = true)
+    @Query(value = "select  c, u.login, q.title from quotes q join (select s.quote_id, count(s.user_id) as c from score s group by s.quote_id order by c desc limit 10)ss on (q.id = ss.quote_id) join users u on (u.id = q.user_id);", nativeQuery = true)
     List<String> getTopTenQuotes();
 }
