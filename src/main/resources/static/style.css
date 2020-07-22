@@ -88,4 +88,29 @@ body {
     align-self:flex-end;
     text-decoration: underline;
 }
-
+.login_info{
+    border: 1px solid #9E9E9E;
+    display:flex;
+    flex-direction:column;
+    padding:20px;
+    max-height:300px;
+    width:150px;
+}
+.last_votes{
+    border: 1px solid #9E9E9E;
+    display:flex;
+    flex-direction:column;
+    padding: 5px;
+    margin: 5px;
+}
+.create_acc:hover{
+    color:#9E9E9E;
+}
+.registration_form,.profile{
+    border: 1px solid #9E9E9E;
+    display:flex;
+    flex-direction:column;
+    padding:20px;
+    margin:50px;
+    width:150px;
+}

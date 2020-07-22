@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Registration</title>
+    <link rel="stylesheet" th:href="@{style.css}">
+</head>
+<body>
+<form class="registration_form" th:action="@{/registration}"
+      th:object="${userDto}" method="post">
+    <input class="login" type="text" name="login" placeholder="login"
+           required minlength="3" maxlength="20">
+    <input class="login" type="password" name="password" placeholder="password"
+           required minlength="4" maxlength="20">
+    <input class="login" type="password" name="confirmPassword" placeholder="confirm password"
+           required minlength="4" maxlength="20">
+    <input class="login" type="email" name="email" placeholder="email"
+           required minlength="4" maxlength="20">
+    <p th:text="${error}"></p>
+    <button type="submit" class="login, sign_in">Submit</button>
+</form>
+</body>
+</html>

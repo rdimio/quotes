@@ -5,14 +5,14 @@
     <meta charset="UTF-8">
     <title>top10</title>
     <link rel="stylesheet" th:href="@{style.css}">
-    <script src="https://kit.fontawesome.com/90f5d1d736.js" crossorigin="anonymous"></script>
 </head>
 <body>
     <div class="container">
         <div class="nav">
-            <a th:href="@{/profile}" class="menu" >Profile</a>
+            <a th:if="${newUser != null}" th:href="@{'/profile?login=' + ${user.login}}" class="menu" >Profile</a>
+            <a th:if="${newUser == null}" href="#"class="menu" >Profile</a>
             <a th:href="@{/}"  class="menu">Top 10 </a>
-            <a th:href="@{/flop}"  class="menu">Flop 10</a>
+            <a href="#"  class="menu">Flop 10</a>
             <a th:href="@{/last}"  class="menu">Last</a>
         </div>
         <div class="content">
@@ -29,14 +29,29 @@
                     </div>
                 </div>
             </div>
-            <form class="login_form" th:action="@{/login}" th:object="${user}" method="post">
-                <input class="login" type="text" name="login" placeholder="Login"
-                       required minlength="3" maxlength="20">
-                <input class="login" type="password" name="password" placeholder="Password"
-                       required minlength="4" maxlength="20">
-                <button type="submit" class="login, sign_in">Sign in</button>
-                <a class="login, create_acc" th:href="@{/registration}">Create an account!</a>
-            </form>
+                <form  th:if="${newUser == null}" class="login_form" th:action="@{/}"
+                      th:object="${user}" method="post">
+                    <input class="login" type="text" name="login" placeholder="Login"
+                           required minlength="3" maxlength="20">
+                    <input class="login" type="password" name="password" placeholder="Password"
+                           required minlength="4" maxlength="20">
+                    <p th:text="${error}"></p>
+                    <button type="submit" class="login, sign_in">Sign in</button>
+                    <a class="login, create_acc" th:href="@{/registration}">Create an account!</a>
+                </form>
+
+            <div th:if="${newUser != null}" class="login_info">
+                <p th:text = "${'Hello, ' + user.login + '!'}"></p>
+                <div class="photo">
+                    <a th:href="@{/profile}">Edit</a>
+                </div>
+                <div class="last_votes" >
+                    <p th:text="${'Last votes ' + votes.count}"></p>
+                    <div th:each="v : ${votes.list}">
+                        <p th:text="${v}"></p>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 </body>

@@ -6,8 +6,8 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import ru.vadimr.quotes.dto.QuoteDto;
 import ru.vadimr.quotes.entities.Quote;
+import ru.vadimr.quotes.entities.User;
 import ru.vadimr.quotes.service.QuoteService;
-
 import java.util.List;
 
 @Controller
@@ -29,11 +29,6 @@ public class QuotesController {
         return "index";
     }
 
-    @GetMapping("/profile")
-    public String profilePage() {return "profile";}
-
-    @GetMapping("/flop")
-    public String flopPage() {return "flop";}
 
     @GetMapping("/last")
     public String lastPage() {return "last";}

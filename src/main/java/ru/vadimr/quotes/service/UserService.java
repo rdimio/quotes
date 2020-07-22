@@ -1,63 +1,61 @@
 package ru.vadimr.quotes.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 import ru.vadimr.quotes.dto.UserDto;
+import ru.vadimr.quotes.dto.VotesDto;
+import ru.vadimr.quotes.entities.Quote;
 import ru.vadimr.quotes.entities.User;
 import ru.vadimr.quotes.repository.UserRepository;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+
+import java.util.ArrayList;
 import java.util.List;
 
-
 @Service
-public class UserService implements UserDetailsService {
+public class UserService {
 
     private UserRepository userRepository;
-    private BCryptPasswordEncoder passwordEncoder;
+    private BCryptPasswordEncoder bCryptPasswordEncoder = new BCryptPasswordEncoder();
 
     @Autowired
     public void setUserRepository(UserRepository userRepository) {
         this.userRepository = userRepository;
     }
 
-    @Autowired
-    public void setPasswordEncoder(BCryptPasswordEncoder passwordEncoder) {
-        this.passwordEncoder = passwordEncoder;
+    public User findByLogin(String login, String password) {
+        User user = userRepository.findOneByLogin(login);
+        if(bCryptPasswordEncoder.matches(password, user.getPassword())) {
+            return user;
+        }
+        else return null;
     }
 
-    public User findByLogin(String login) {
+    public VotesDto getVotes(Integer id) {
+        List<String> list = userRepository.getVotes(id);
+        List<String> str = new ArrayList<>();
+        int i = 0;
+        for(String s : list){
+            str.add(s.substring(0, 7));
+            i++;
+        }
+        VotesDto votesDto = new VotesDto();
+        votesDto.setList(str);
+        votesDto.setCount(i);
+        return votesDto;
+    }
+
+    public User findByEmail(String email){
+        return userRepository.findOneByEmail(email);
+    }
+
+    public User findOneByLogin(String login){
         return userRepository.findOneByLogin(login);
     }
 
-    public User findByEmail(String email) { return userRepository.findOneByEmail(email);}
-
-    @Override
-    public UserDetails loadUserByUsername(String login) throws UsernameNotFoundException {
-        User user = userRepository.findOneByLogin(login);
-        if (user == null) {
-            throw new UsernameNotFoundException("Incorrect login or password");
-        }
-        return new org.springframework.security.core.userdetails.User(user.getLogin(), user.getPassword(), null);
-    }
-
-    public List<User> findAll() {return (List<User>) userRepository.findAll();}
-
-    @Transactional
-    public void delete(Integer id) { userRepository.deleteById(id);
-    }
-
-    @Transactional
-    public void save(User user) { userRepository.save(user);
-    }
-
-    @Transactional
-    public void registrationUser(UserDto userDto) {
-        User user = new User(userDto.getLogin(),passwordEncoder.encode(userDto.getPassword()),userDto.getEmail());
+    public void save(UserDto userDto){
+        String hash = bCryptPasswordEncoder.encode(userDto.getPassword());
+        User user = new User(hash, userDto.getLogin(), userDto.getEmail());
         userRepository.save(user);
     }
-
 }
