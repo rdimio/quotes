@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <title>top10</title>
+    <link rel="stylesheet" th:href="@{style.css}">
+    <script src="https://kit.fontawesome.com/90f5d1d736.js" crossorigin="anonymous"></script>
+</head>
+<body>
+    <div class="container">
+        <div class="nav">
+            <a th:href="@{/profile}" class="menu" >Profile</a>
+            <a th:href="@{/}"  class="menu">Top 10 </a>
+            <a th:href="@{/flop}"  class="menu">Flop 10</a>
+            <a th:href="@{/last}"  class="menu">Last</a>
+        </div>
+        <div class="content">
+            <div class="quotes">
+                <div class="random_quote" th:text="${quote.title}"></div>
+                <div class="top_quote" th:each="q : ${quotes}">
+                    <div class="score" th:text="${'Top '+ q.number + ' quote, score -' + q.score}"></div>
+                    <div class="bottom">
+                        <div class="buttons">
+                            <button class="btn" type="button" th:href="@{/}" >+</button>
+                            <button class="btn" type="button" th:href="@{/}" >-</button>
+                        </div>
+                        <div class="posted" th:text="${'Posted by '+q.login}"></div>
+                    </div>
+                </div>
+            </div>
+            <form class="login_form" th:action="@{/login}" th:object="${user}" method="post">
+                <input class="login" type="text" name="login" placeholder="Login"
+                       required minlength="3" maxlength="20">
+                <input class="login" type="password" name="password" placeholder="Password"
+                       required minlength="4" maxlength="20">
+                <button type="submit" class="login, sign_in">Sign in</button>
+                <a class="login, create_acc" th:href="@{/registration}">Create an account!</a>
+            </form>
+        </div>
+    </div>
+</body>
+</html>
